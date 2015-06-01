@@ -1,0 +1,60 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.zekun.parseloginv4.DisplayUserInfo">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        android:layout_gravity="right|top">
+
+
+
+    </TableRow>
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1"
+        android:layout_gravity="bottom">
+
+        <Button
+            android:layout_width="191dp"
+            android:layout_height="wrap_content"
+            android:text="Post"
+            android:id="@+id/postButton"
+            android:layout_gravity="bottom" />
+
+        <Button
+            android:layout_width="188dp"
+            android:layout_height="wrap_content"
+            android:text="Sign Out"
+            android:id="@+id/signoutButton"
+            android:layout_gravity="bottom" />
+
+    </TableRow>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="196dp"
+        android:text="New Text"
+        android:id="@+id/displayUser"
+        android:layout_gravity="center_horizontal|top"
+        android:background="#ff56ff41" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:text="New Text"
+        android:id="@+id/messageBox"
+        android:layout_gravity="center"
+        android:background="#ff07ffe0" />
+
+</FrameLayout>
