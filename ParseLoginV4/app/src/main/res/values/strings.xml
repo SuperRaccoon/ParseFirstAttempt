@@ -9,4 +9,6 @@
     <string name="title_activity_post_details">PostDetails</string>
 
     <string name="title_activity_fullscreen_activityv2">FullscreenActivityv2</string>
+
+    <string name="title_activity_user_lookup">UserLookup</string>
 </resources>

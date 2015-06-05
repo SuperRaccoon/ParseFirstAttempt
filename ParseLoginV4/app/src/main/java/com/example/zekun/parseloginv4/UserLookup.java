@@ -5,10 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.zekun.parseloginv4.util.SystemUiHider;
-import com.parse.ParseUser;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
+
+import java.util.HashMap;
 
 
 /**
@@ -17,7 +22,7 @@ import com.parse.ParseUser;
  *
  * @see SystemUiHider
  */
-public class DisplayUserInfo extends Activity {
+public class UserLookup extends Activity {
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -46,21 +51,20 @@ public class DisplayUserInfo extends Activity {
      */
     private SystemUiHider mSystemUiHider;
 
-    private static String username;
-    private static String usermessage;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_display_user_info);
+        setContentView(R.layout.activity_user_lookup);
+
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.fullscreen_content);
 
         // Set up an instance of SystemUiHider to control the system UI for
         // this activity.
-/*
+
+        /*
         mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
         mSystemUiHider.setup();
         mSystemUiHider
@@ -116,82 +120,79 @@ public class DisplayUserInfo extends Activity {
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
+        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
 */
 
-        ParseUser currentUser = ParseUser.getCurrentUser();
 
-        username = currentUser.getUsername();
+        //final String returnMessage = "H";
 
-        //public void done(ParseObject object, ParseException e) {
-
-        usermessage = currentUser.getString("message");
+        Button loginButton = (Button) findViewById(R.id.lookupButton);
 
 
-        //TextView myText=new TextView(this);
-        //myText.setTextSize(20);
-        //myText.setText("Welcome "+username);
-        //String myMessage=(user+" is playing the best game ever!");
-        TextView myDisplayTV = (TextView) findViewById(R.id.displayUser);
-        myDisplayTV.setText("Welcome " + username);
-
-        TextView myDisplayTV1 = (TextView) findViewById(R.id.messageBox);
-        myDisplayTV1.setText(usermessage);
-
-        Button logout = (Button) findViewById(R.id.signoutButton);
-        logout.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                logoutProcedure();
+                EditText userToLookUpPrev = (EditText) findViewById(R.id.userLookUp);
+                final String userToLookUp = userToLookUpPrev.getText().toString();
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("usernametolookup", userToLookUp);
+                ParseCloud.callFunctionInBackground("userlookup", params, new FunctionCallback<String>() {
+                    public void done(String result, ParseException e) {
+                        if (e == null) {
+                            /*
+                          String returnMessage = "User " + userToLookUp + " was found!";
+                            TextView myDisplay = (TextView) findViewById(R.id.displayWindow);
+                            myDisplay.setText(returnMessage);
+
+
+                           */
+                            /*
+                            if (result==1){
+                                String returnMessage = "User " + userToLookUp + " was found!";
+                                TextView myDisplay = (TextView) findViewById(R.id.displayWindow);
+                                myDisplay.setText(returnMessage);
+                            }
+                            if(result==0){
+                                String returnMessage = "User " + userToLookUp + " was not found!";
+                                TextView myDisplay = (TextView) findViewById(R.id.displayWindow);
+                                myDisplay.setText(returnMessage);
+                            }
+                            */
+                            String returnMessage = result;
+                            TextView myDisplay = (TextView) findViewById(R.id.displayWindow);
+                            myDisplay.setText(returnMessage);
+                        }
+
+
+                        else{
+                            String returnMessage = "Error looking up the user: " + userToLookUp;
+                            TextView myDisplay = (TextView) findViewById(R.id.displayWindow);
+                            myDisplay.setText(returnMessage);
+                        }
+                    }
+                });
+
+
+
 
 
             }
         });
 
-        Button postButton = (Button) findViewById(R.id.postButton);
-        postButton.setOnClickListener(new View.OnClickListener() {
+        Button backButton = (Button) findViewById(R.id.homeButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                postProcedure();
-
-
+                goHome();
             }
         });
-
-        Button lookupButton = (Button) findViewById(R.id.lookupUserButton);
-        lookupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                lookupUser();
-
-
-            }
-        });
-
-
     }
 
-    protected void lookupUser(){
-        Intent useThis = new Intent(this, UserLookup.class);
-        startActivity(useThis);
-    }
-    protected void postProcedure(){
-/*
-        EditText myMessageEditText = (EditText) findViewById(R.id.messageBox);
-        ParseUser currentUser= ParseUser.getCurrentUser();
-        currentUser.put("message",myMessageEditText.toString());
-        */
-        Intent getUser= new Intent(this, PostDetails.class);
+
+    protected void goHome(){
+        Intent getUser= new Intent(this, DisplayUserInfo.class);
         startActivity(getUser);
     }
-    protected void logoutProcedure(){
-        ParseUser currUser = ParseUser.getCurrentUser();
-        //currUser.logOut();
-        //currUser.logOutInBackground();
-        ParseUser.logOutInBackground();
-        Intent logoutScreen= new Intent(this, FullscreenActivityv2.class);
-        startActivity(logoutScreen);
-    }
-
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -199,7 +200,7 @@ public class DisplayUserInfo extends Activity {
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
         // are available.
-       // delayedHide(100);
+      //  delayedHide(100);
     }
 
 
@@ -226,16 +227,13 @@ public class DisplayUserInfo extends Activity {
             mSystemUiHider.hide();
         }
     };
-*/
+
     /**
      * Schedules a call to hide() in [delay] milliseconds, canceling any
      * previously scheduled calls.
      */
-
-    /*
     private void delayedHide(int delayMillis) {
-        mHideHandler.removeCallbacks(mHideRunnable);
-        mHideHandler.postDelayed(mHideRunnable, delayMillis);
+        //mHideHandler.removeCallbacks(mHideRunnable);
+        //mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
-    */
 }

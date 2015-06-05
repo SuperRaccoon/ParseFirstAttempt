@@ -57,4 +57,13 @@
         android:layout_gravity="center"
         android:background="#ff07ffe0" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="73dp"
+        android:text="Lookup User"
+        android:id="@+id/lookupUserButton"
+        android:layout_gravity="right|center_vertical"
+        android:clickable="false"
+        android:elegantTextHeight="false"/>
+
 </FrameLayout>

@@ -39,6 +39,12 @@
             android:label="@string/title_activity_fullscreen_activityv2"
             android:theme="@style/FullscreenTheme" >
         </activity>
+        <activity
+            android:name=".UserLookup"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_user_lookup"
+            android:theme="@style/FullscreenTheme" >
+        </activity>
     </application>
 
 </manifest>
